@@ -24,11 +24,56 @@ int main()
 {
 	setbuf(stdout,NULL);
     //int option = 0;
+	int id;
+	char nombre[20];
+	int sueldo;
+	int horas;
 	Employee* p=employee_new();
 	printf("%d- %s- %d- %d",p->id,p->nombre,p->horasTrabajadas,p->sueldo);
+	//compruebo setters
+	employee_setId(p,33);
+	employee_setNombre(p,"Luis");
+	employee_setHorasTrabajadas(p,100);
+	employee_setSueldo(p,30000);
+	employee_mostrar(p);
+	//compruebo getCampos
+	if(employee_getCampos(p,&id,nombre,&horas,&sueldo)==1)
+	{
+		printf("campos con get_campo:%d%s%d%d\n",id,nombre,horas,sueldo);
+	}
+	//compruebo setCampos
+	if(employee_setCampos(p,1,"Anya",20,15000)==1)
+	{
+		employee_mostrar(p);
+	}
 
+	//compruebo constructor
+	Employee* p2=employee_newParametros("100","Joni","60","12000");
+	//compruebo getters
+
+	if(employee_getId(p2,&id)==1)
+	{
+		printf("id:%d\n",id);
+	}
+	if(employee_getNombre(p2,nombre)==1)
+		{
+			printf("nombre:%s\n",nombre);
+		}
+	if(employee_getHorasTrabajadas(p2,&horas)==1)
+		{
+			printf("horas:%d\n",horas);
+		}
+	if(employee_getSueldo(p2,&sueldo)==1)
+		{
+			printf("sueldo:%d\n",sueldo);
+		}
+	//compruebo mostrar
+	employee_mostrar(p2);
     //LinkedList* listaEmpleados = ll_newLinkedList();
-    printf("funciona\n");
+	//compruebo delete
+	employee_delete(p2);
+	employee_delete(p);
+
     /*
     do{
         switch(option)
