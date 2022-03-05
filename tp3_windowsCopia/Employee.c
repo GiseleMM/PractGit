@@ -1,4 +1,6 @@
+
 #include "Employee.h"
+
 
 
 Employee* employee_new()
@@ -9,7 +11,7 @@ Employee* employee_new()
 	{
 		pElement->id=0;
 		strcpy(pElement->nombre," ");
-		pElement->horasTrabajas=0;
+		pElement->horasTrabajadas=0;
 		pElement->sueldo=0;
 	}
 	return pElement;

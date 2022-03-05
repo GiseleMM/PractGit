@@ -23,9 +23,11 @@
 int main()
 {
 	setbuf(stdout,NULL);
-    int option = 0;
+    //int option = 0;
+	Employee* p=employee_new();
+	printf("%d- %s- %d- %d",p->id,p->nombre,p->horasTrabajadas,p->sueldo);
 
-    LinkedList* listaEmpleados = ll_newLinkedList();
+    //LinkedList* listaEmpleados = ll_newLinkedList();
     printf("funciona\n");
     /*
     do{
