@@ -13,7 +13,8 @@
  */
 int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+    int todoOk=1;
+    return todoOk;
 }
 
 /** \brief Carga los datos de los empleados desde el archivo data.csv (modo binario).
