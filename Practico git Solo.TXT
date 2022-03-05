@@ -1,7 +1,0 @@
-Git Init 
-git status -s
-git add nombre del archivo
-git commit -m"inicio"
-git add nombre del archivo
-git long -- oneline 
-git resert --hard codigo de commimts
