@@ -69,7 +69,14 @@ int main()
 		}
 	//compruebo mostrar
 	employee_mostrar(p2);
-    //LinkedList* listaEmpleados = ll_newLinkedList();
+    LinkedList* listaEmpleados = ll_newLinkedList();
+    if(listaEmpleados!=NULL)
+    {
+    	printf("lista creada  con exito");
+    	ll_add(listaEmpleados,p);
+    	ll_add(listaEmpleados,p2);
+    	controller_ListEmployee(listaEmpleados);
+    }
 	//compruebo delete
 	employee_delete(p2);
 	employee_delete(p);
@@ -83,6 +90,8 @@ int main()
                 break;
         }
     }while(option != 10);*/
+
+	ll_deleteLinkedList(listaEmpleados);
     return 0;
 }
 

@@ -74,7 +74,33 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_ListEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int todoOk=0;
+	int tam;
+	int contador=0;
+	Employee* auxEmployee=NULL;
+	if(pArrayListEmployee!=NULL)
+	{
+		tam=ll_len(pArrayListEmployee);
+		for(int i=0;i<tam;i++)
+		{
+			auxEmployee=(Employee*)ll_get(pArrayListEmployee,i);
+			if(auxEmployee!=NULL)
+			{
+				employee_mostrar(auxEmployee);
+				contador++;
+			}
+		}
+	}
+	if(contador==0)
+	{
+		printf("lista vacia");
+	}
+	else
+	{
+	printf(" se mostraron %d elementos \n",contador);
+	}
+
+    return todoOk;
 }
 
 /** \brief Ordenar empleados
