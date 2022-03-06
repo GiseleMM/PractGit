@@ -72,10 +72,17 @@ int main()
     LinkedList* listaEmpleados = ll_newLinkedList();
     if(listaEmpleados!=NULL)
     {
-    	printf("lista creada  con exito");
+    	printf("lista creada  con exito\n");
     	ll_add(listaEmpleados,p);
     	ll_add(listaEmpleados,p2);
+    	//compruebo controllerList
     	controller_ListEmployee(listaEmpleados);
+    	//compruebo controllerRemove
+    	controller_removeEmployee(listaEmpleados);
+    	controller_ListEmployee(listaEmpleados);
+    	//compruebo controllerSort
+    	controller_sortEmployee(listaEmpleados);
+
     }
 	//compruebo delete
 	employee_delete(p2);
