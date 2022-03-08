@@ -24,7 +24,41 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
 {
     return 1;
 }
-
+int mayorId(LinkedList* pArrayListEmployee)
+{
+	int id;
+	int auxInt;
+	Employee* auxEmpleado;
+	int mayor;
+	int flagMayor=0;
+	int tam;
+	if(pArrayListEmployee!=NULL)
+	{
+		tam=ll_len(pArrayListEmployee);
+		for(int i=0;i<tam;i++)
+		{
+			auxEmpleado=(Employee*)ll_get(pArrayListEmployee,i);
+			if(auxEmpleado!=NULL)
+			{
+				auxInt=auxEmpleado->id;
+				if(flagMayor==0 || auxInt> mayor)
+				{
+					mayor=auxInt;
+					flagMayor=1;
+				}
+			}
+		}
+		if(flagMayor==0)
+		{
+			id=-1;//error no se ingreso a ningun empleado
+		}
+		else
+		{
+			id=mayor;
+		}
+	}
+	return id;
+}
 /** \brief Alta de empleados
  *
  * \param path char*
@@ -34,7 +68,74 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
  */
 int controller_addEmployee(LinkedList* pArrayListEmployee)
 {
-return 1;
+	int todoOk=0;
+	int id;
+	int sueldo;
+	int horas;
+	char nombre[30];
+	Employee* auxEmployee=NULL;
+	char confirma[3];
+	if(pArrayListEmployee!=NULL)
+	{
+		system("cls");
+		auxEmployee=employee_new();//creo empleado vacio
+
+		id=mayorId(pArrayListEmployee);
+		if(id!=-1)
+		{
+			employee_setId(auxEmployee,id);
+		}
+		printf("ingrese nombre");
+		fflush(stdin);
+		gets(nombre);
+
+		while(!employee_setNombre(auxEmployee,nombre))
+		{
+			printf("Error ");
+			printf("Reingrese nombre:");
+					fflush(stdin);
+					gets(nombre);
+		}
+		printf("ingrese horas:");
+		fflush(stdin);
+		scanf("%d",&horas);
+		while(!employee_setHorasTrabajadas(auxEmployee,horas))
+		{
+			printf("Error ");
+			printf("REingrese horas:");
+				fflush(stdin);
+				scanf("%d",&horas);
+		}
+		printf("ingrese sueldo:");
+		fflush(stdin);
+		scanf("%d",&sueldo);
+		while(!employee_setSueldo(auxEmployee,sueldo))
+		{
+			printf("Error ");
+			printf("REingrese sueldo:");
+				fflush(stdin);
+				scanf("%d",&sueldo);
+		}
+		employee_mostrar(auxEmployee);
+		printf("confirma empleado?si/no:\n");
+		fflush(stdin);
+		gets(confirma);
+		if(stricmp(confirma,"si")==0)
+		{
+			if(ll_add(pArrayListEmployee,auxEmployee)==0)
+			{
+				todoOk=1;
+			}
+
+		}
+		else
+		{
+			employee_delete(auxEmployee);
+			auxEmployee=NULL;
+			printf("Empleado no creado\n");
+		}
+	}
+return todoOk;
 }
 
 /** \brief Modificar datos de empleado
@@ -46,7 +147,111 @@ return 1;
  */
 int controller_editEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int todoOk=0;
+	int id;
+	int indice;
+	int sueldo;
+	int horas;
+	char nombre[30];
+	Employee* auxEmployee=NULL;
+	char confirma[3];
+	int opcion;
+	int seModifico=0;
+	if(pArrayListEmployee!=NULL)
+	{
+		//printf("ingrse a lista distinta denull>>>>>\n");
+		if(controller_ListEmployee(pArrayListEmployee))//me falto modificar el retorno siempre devolvia 0 por eso no modif
+		{
+
+			//printf("ingrse a lista mostrar>>>>>\n");
+			printf("ingrese id:");
+			fflush(stdin);
+			if(!scanf("%d",&id))
+			{
+				printf("dato no valido");
+			}
+			else
+			{
+				indice=controller_buscarEmployee(pArrayListEmployee,id);
+				if(indice==-1)
+				{
+					printf("empleado no encontrado\n");
+				}
+				else
+				{
+					auxEmployee=(Employee*)ll_get(pArrayListEmployee,indice);
+					if(auxEmployee!=NULL)
+					{
+						employee_mostrar(auxEmployee);
+						printf("es el empleado  a modificar?si/no ");
+						fflush(stdin);
+						gets(confirma);
+						if(stricmp(confirma,"si")==0)
+						{
+							printf("Seleccione opcion:\n");
+							printf("1-nombre\n");
+							printf("2-horas\n");
+							printf("3-sueldo\n");
+							fflush(stdin);
+							if(!scanf("%d",&opcion))
+							{
+								printf("opcion  invalida");
+							}
+							switch(opcion)
+							{case 1:
+								printf("Ingrese nombre:");
+								fflush(stdin);
+								gets(nombre);
+								if(employee_setNombre(auxEmployee,nombre))
+								{
+									seModifico=1;
+								}
+								break;
+							case 2:
+								printf("Ingrese horas:");
+								fflush(stdin);
+								scanf("%d",&horas);
+								if(employee_setHorasTrabajadas(auxEmployee,horas))
+								{
+									seModifico=1;
+								}
+								break;
+							case 3:
+								printf("Ingrese sueldo:");
+								fflush(stdin);
+								scanf("%d",&sueldo);
+								if(employee_setSueldo(auxEmployee,sueldo))
+								{
+									seModifico=1;
+								}
+								break;
+							default:
+								printf("opcion invalida");
+								break;
+
+						}
+
+					}
+					else
+					{
+						printf("modificacion cancelada\n");
+					}
+				}
+			}
+
+		}
+
+	}
+
+	}
+
+	if(seModifico)
+	{
+		printf("Empleado modificado:\n");
+		employee_mostrar(auxEmployee);
+		todoOk=1;
+	}
+    return todoOk;
 }
 
 /** \brief Baja de empleado
@@ -115,6 +320,7 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 	Employee* auxEmployee=NULL;
 	if(pArrayListEmployee!=NULL)
 	{
+
 		tam=ll_len(pArrayListEmployee);
 		for(int i=0;i<tam;i++)
 		{
@@ -132,6 +338,7 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 	}
 	else
 	{
+		todoOk=1;
 	printf(" se mostraron %d elementos \n",contador);
 	}
 

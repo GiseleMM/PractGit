@@ -82,6 +82,12 @@ int main()
     	controller_ListEmployee(listaEmpleados);
     	//compruebo controllerSort
     	controller_sortEmployee(listaEmpleados);
+    	//compruebo controllerAdd
+    	controller_addEmployee(listaEmpleados);
+    	controller_ListEmployee(listaEmpleados);
+    	//compruebo controllerEdit
+    	controller_editEmployee(listaEmpleados);
+    	//controller_ListEmployee(listaEmpleados);
 
     }
 	//compruebo delete
