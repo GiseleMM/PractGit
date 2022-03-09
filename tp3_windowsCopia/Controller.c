@@ -596,9 +596,9 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 							  	  	  //si pongo cant=fwrite y verifico que cant<1 no lee todos los elementos de la lisa
 							  contador++;
 						  }
-						  fclose(pFile);
-					  }
 
+					  }
+					  fclose(pFile);
 				  }
 	  }
 
