@@ -10,6 +10,24 @@
 int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 {
     int todoOk=1;
+    FILE* pFile=NULL;
+    if(path!=NULL && pArrayListEmployee!=NULL)
+    {
+    	pFile=fopen(path,"r");
+    	if(pFile!=NULL)
+    	{
+    		if(parser_EmployeeFromText(pFile,pArrayListEmployee)==1)
+    		{
+    			todoOk=1;
+    		}
+    		else
+    		{
+    			printf("Error en Lectura de archivo: %s\n",path);
+    		}
+    		fclose(pFile);
+    	}
+
+    }
     return todoOk;
 }
 
@@ -22,7 +40,26 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
  */
 int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+    int todoOk=0;
+    FILE* pFile=NULL;
+    if(path!=NULL && pArrayListEmployee)
+    {
+    	pFile=fopen(path,"rb");
+    	if(pFile!=NULL)
+    	{
+    		if(parser_EmployeeFromBinary(pFile,pArrayListEmployee)==1)
+    		{
+    			todoOk=1;
+    		}
+    		else
+    		{
+    			printf("Error de lectura de archivo: %s\n",path);
+    		}
+
+    		fclose(pFile);
+    	}
+    }
+	return todoOk;
 }
 int mayorId(LinkedList* pArrayListEmployee)
 {
@@ -83,6 +120,7 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 		id=mayorId(pArrayListEmployee);
 		if(id!=-1)
 		{
+			id++;/*no uso el mayor si no uno mas*/
 			employee_setId(auxEmployee,id);
 		}
 		printf("ingrese nombre");
@@ -462,7 +500,56 @@ int compararNombre(void* p1,void* p2)
  */
 int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+    int todoOk=0;
+    FILE* pFile=NULL;
+    FILE* aux=NULL;
+    char confirma[3];
+    int tam;
+    int contador=0;
+    int id;
+    char nombre[30];
+    int horas;
+    int sueldo;
+    Employee* auxEmployee=NULL;
+    if(path!=NULL && pArrayListEmployee!=NULL)
+    {
+    	aux=fopen(path,"r");
+    	if(aux!=NULL)
+    	{
+    		printf("Archivo: %s ya exite, desea sobreescribirlo?si/no\n",path);
+    		fflush(stdin);
+    		gets(confirma);
+    		fclose(aux);//cierro archivo modo lectura
+    	}
+    	if(aux==NULL || (stricmp(confirma,"si")==0))
+    	{
+    		pFile=fopen(path,"w");
+    		if(pFile!=NULL)
+    		{
+    			todoOk=1;
+    			/*encabezado formato csv*/
+    			fprintf(pFile,"id,nombre,horasTrabajadas,sueldo\n");
+    			tam=ll_len(pArrayListEmployee);
+    			for(int i=0;i<tam;i++)
+    			{
+    				auxEmployee=(Employee*)ll_get(pArrayListEmployee,i);
+    				if(auxEmployee!=NULL)
+    				{
+    					if(employee_getCampos(auxEmployee,&id,nombre,&horas,&sueldo)==1)
+    					{
+
+    						fprintf(pFile,"%d,%s,%d,%d\n",id,nombre,horas,sueldo);
+
+    						contador++;
+    					}
+    				}
+    			}
+    			fclose(pFile);
+    		}
+    	}
+    }
+    printf("escritura en archivo %s de %d elementos\n",path,contador);
+	return todoOk;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo binario).
@@ -474,7 +561,51 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
  */
 int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+  int todoOk=0;
+  FILE* aux=NULL;
+  FILE* pFile=NULL;
+  char confirma[3];
+  int contador=0;
+  int tam;
+  Employee* auxEmployee=NULL;
+  if(path!=NULL && pArrayListEmployee!=NULL)
+  {
+	  aux=fopen(path,"rb");/*abro modo lectura binaria para verificar si el archivo existe*/
+	  if(aux!=NULL)
+	  {
+		  printf("Archivo : %s ya existe ,desea sobreescribirlo? si/no:\n",path);
+			  fflush(stdin);
+			  gets(confirma);
+			  fclose(aux);
+	  }
+	  if((stricmp(confirma,"si")==0) || aux==NULL)/*si exite y lo queiro sobreescribir o si no exite*/
+	  {
+				  pFile=fopen(path,"wb");//abro para escritura
+				  if(pFile!=NULL)
+				  {
+					  todoOk=1;
+					  tam=ll_len(pArrayListEmployee);
+					  printf("Recorro lista\n");
+					  for(int i=0;i<tam;i++)//recorro lista;
+					  {
+						  auxEmployee=(Employee*)ll_get(pArrayListEmployee,i);
+						  if(auxEmployee!=NULL)
+						  {
+							  employee_mostrar(auxEmployee);
+							  fwrite(auxEmployee,sizeof(Employee),1,pFile);
+							  	  	  //si pongo cant=fwrite y verifico que cant<1 no lee todos los elementos de la lisa
+							  contador++;
+						  }
+						  fclose(pFile);
+					  }
+
+				  }
+	  }
+
+
+  }
+  printf("escritura en archivo %s de %d elementos\n",path,contador);
+	return todoOk;
 }
 /** \brief busca en lista id de empleado si lo encuentra retorna indice si no -1
  *

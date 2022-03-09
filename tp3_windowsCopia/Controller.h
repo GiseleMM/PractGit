@@ -7,7 +7,7 @@
 #include "LinkedList.h"
 #include "Employee.h"
 #include <string.h>
-
+#include "Parser.h"
 
 int mayorId(LinkedList* pArrayListEmployee);
 

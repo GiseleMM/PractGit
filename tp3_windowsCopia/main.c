@@ -88,6 +88,10 @@ int main()
     	//compruebo controllerEdit
     	controller_editEmployee(listaEmpleados);
     	//controller_ListEmployee(listaEmpleados);
+    	//compruebo controllerSaveAsBinary;
+    	controller_saveAsBinary("archivo.bin",listaEmpleados);
+    	//comprubo controllerSaveAsText
+    	controller_saveAsText("practica.csv",listaEmpleados);
 
     }
 	//compruebo delete
