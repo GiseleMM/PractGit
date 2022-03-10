@@ -72,7 +72,7 @@ int main()
     LinkedList* listaEmpleados = ll_newLinkedList();
     if(listaEmpleados!=NULL)
     {
-    	printf("lista creada  con exito\n");
+    	/*printf("lista creada  con exito\n");
     	ll_add(listaEmpleados,p);
     	ll_add(listaEmpleados,p2);
     	//compruebo controllerList
@@ -92,6 +92,11 @@ int main()
     	controller_saveAsBinary("archivo.bin",listaEmpleados);
     	//comprubo controllerSaveAsText
     	controller_saveAsText("practica.csv",listaEmpleados);
+    	//pruebo parte de parserLoadFromText con controller
+    	controller_loadFromText("practica.csv",listaEmpleados);
+    	*/
+    	//conpruebo controllerLoadFromBinary
+    	controller_loadFromBinary("archivo.bin",listaEmpleados);
 
     }
 	//compruebo delete
