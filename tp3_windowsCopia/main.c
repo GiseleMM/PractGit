@@ -18,102 +18,72 @@
     10. Salir
 *****************************************************/
 
-
-
+int confirmarSiNo(void);
+int menu(void);
 int main()
 {
 	setbuf(stdout,NULL);
-    //int option = 0;
-	int id;
-	char nombre[20];
-	int sueldo;
-	int horas;
-	Employee* p=employee_new();
-	printf("%d- %s- %d- %d",p->id,p->nombre,p->horasTrabajadas,p->sueldo);
-	//compruebo setters
-	employee_setId(p,33);
-	employee_setNombre(p,"Luis");
-	employee_setHorasTrabajadas(p,100);
-	employee_setSueldo(p,30000);
-	employee_mostrar(p);
-	//compruebo getCampos
-	if(employee_getCampos(p,&id,nombre,&horas,&sueldo)==1)
-	{
-		printf("campos con get_campo:%d%s%d%d\n",id,nombre,horas,sueldo);
-	}
-	//compruebo setCampos
-	if(employee_setCampos(p,1,"Anya",20,15000)==1)
-	{
-		employee_mostrar(p);
-	}
+    int option = 0;
 
-	//compruebo constructor
-	Employee* p2=employee_newParametros("100","Joni","60","12000");
-	//compruebo getters
-
-	if(employee_getId(p2,&id)==1)
-	{
-		printf("id:%d\n",id);
-	}
-	if(employee_getNombre(p2,nombre)==1)
-		{
-			printf("nombre:%s\n",nombre);
-		}
-	if(employee_getHorasTrabajadas(p2,&horas)==1)
-		{
-			printf("horas:%d\n",horas);
-		}
-	if(employee_getSueldo(p2,&sueldo)==1)
-		{
-			printf("sueldo:%d\n",sueldo);
-		}
-	//compruebo mostrar
-	employee_mostrar(p2);
     LinkedList* listaEmpleados = ll_newLinkedList();
-    if(listaEmpleados!=NULL)
-    {
-    	/*printf("lista creada  con exito\n");
-    	ll_add(listaEmpleados,p);
-    	ll_add(listaEmpleados,p2);
-    	//compruebo controllerList
-    	controller_ListEmployee(listaEmpleados);
-    	//compruebo controllerRemove
-    	controller_removeEmployee(listaEmpleados);
-    	controller_ListEmployee(listaEmpleados);
-    	//compruebo controllerSort
-    	controller_sortEmployee(listaEmpleados);
-    	//compruebo controllerAdd
-    	controller_addEmployee(listaEmpleados);
-    	controller_ListEmployee(listaEmpleados);
-    	//compruebo controllerEdit
-    	controller_editEmployee(listaEmpleados);
-    	//controller_ListEmployee(listaEmpleados);
-    	//compruebo controllerSaveAsBinary;
-    	controller_saveAsBinary("archivo.bin",listaEmpleados);
-    	//comprubo controllerSaveAsText
-    	controller_saveAsText("practica.csv",listaEmpleados);
-    	//pruebo parte de parserLoadFromText con controller
-    	controller_loadFromText("practica.csv",listaEmpleados);
-    	*/
-    	//conpruebo controllerLoadFromBinary
-    	controller_loadFromBinary("archivo.bin",listaEmpleados);
 
-    }
-	//compruebo delete
-	employee_delete(p2);
-	employee_delete(p);
 
-    /*
+
     do{
-        switch(option)
+        switch(menu())
         {
             case 1:
                 controller_loadFromText("data.csv",listaEmpleados);
                 break;
+            case 10:
+            	//salir
+            	printf("seguro desea salir? si/ no:");
+            	if(confirmarSiNo())//llamo a la funcion
+            	{
+            		option=10;
+            	}
+
+
         }
-    }while(option != 10);*/
+        system("pause");
+    }while(option != 10);
 
 	ll_deleteLinkedList(listaEmpleados);
     return 0;
 }
+//-------------------------------------auxiliares-----------------------------
+int menu(void)
+{int opcion;
+system("cls");
 
+
+printf("\n\n 1. Cargar los datos de los empleados desde el archivo data.csv (modo texto).\n");
+ printf("2. Cargar los datos de los empleados desde el archivo data.csv (modo binario).\n");
+ printf("3. Alta de empleado\n");
+ printf("4. Modificar datos de empleado\n");
+ printf("5. Baja de empleado\n");
+ printf("6. Listar empleados\n");
+ printf("7. Ordenar empleados\n");
+ printf("8. Guardar los datos de los empleados en el archivo data.csv (modo texto).\n");
+ printf("9. Guardar los datos de los empleados en el archivo data.csv (modo binario).\n");
+printf("10.Salir\n");
+fflush(stdin);
+	while(!scanf("%d",&opcion))
+	{
+		printf("dato no valido\n");
+		fflush(stdin);
+	}
+	return opcion;
+}
+int confirmarSiNo(void)
+{
+	int todoOk=0;
+	char confirma[3];
+	fflush(stdin);
+	gets(confirma);
+	if(stricmp(confirma,"si")==0)
+	{
+		todoOk=1;
+	}
+	return todoOk;
+}
