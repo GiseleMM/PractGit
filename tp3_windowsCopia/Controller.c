@@ -328,7 +328,7 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
 				{
 					if(ll_remove(pArrayListEmployee,indice)==0)
 					{
-						todoOk=0;
+						todoOk=1;
 					}
 				}
 				else
