@@ -8,6 +8,7 @@
 #include "Employee.h"
 #include <string.h>
 #include "Parser.h"
+#include "auxiliar.h"
 
 int mayorId(LinkedList* pArrayListEmployee);
 
@@ -24,5 +25,11 @@ int controller_buscarEmployee(LinkedList* pArrayListEmployee,int id);
 
 int compararId(void* p1,void* p2);
 int compararNombre(void* p1,void* p2);
+int menuSort(void);
+
+int menuEdit(void);
+int modificarNombre(Employee* pElement);
+int modificarHoras(Employee* pElement);
+int modificarSueldo(Employee* pElement);
 
 #endif // controller_H_INCLUDED

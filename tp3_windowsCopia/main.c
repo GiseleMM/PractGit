@@ -23,6 +23,7 @@ int menu(void);
 int main()
 {
 	setbuf(stdout,NULL);
+	system("color A1");
     int option = 0;
     char path[30];
     int estaVacia=1;
@@ -35,7 +36,26 @@ int main()
         switch(menu())
         {
             case 1:
-                controller_loadFromText("data.csv",listaEmpleados);
+            	estaVacia=ll_isEmpty(listaEmpleados);
+            	if(estaVacia==0)
+            	{
+            		printf("Lista ya cargada, desea sobreescribirla?");
+            	}
+            	if(estaVacia==1 || (confirmarSiNo()==1) )
+            	{
+					printf("ingrese path(data.csv)");
+					fflush(stdin);
+					gets(path);
+
+					if(controller_loadFromText(path,listaEmpleados))
+					{
+						printf("Lectura exitosa");
+					}
+					else
+					{
+						printf("Error de lectura de archivo");
+					}
+            	}
                 break;
             case 2:
             	estaVacia=ll_isEmpty(listaEmpleados);
@@ -45,7 +65,7 @@ int main()
             	printf("lista ya cargada,desea sobreescribirla?");
             	fflush(stdin);
             }
-            if((confirmarSiNo()==1) || estaVacia==1)
+            if( estaVacia==1 || (confirmarSiNo()==1))
             {
             	ll_clear(listaEmpleados);
             	printf("Ingrese path:");
@@ -184,40 +204,4 @@ int main()
 
 	ll_deleteLinkedList(listaEmpleados);
     return 0;
-}
-//-------------------------------------auxiliares-----------------------------
-int menu(void)
-{int opcion;
-system("cls");
-
-
-printf("\n\n 1. Cargar los datos de los empleados desde el archivo data.csv (modo texto).\n");
- printf("2. Cargar los datos de los empleados desde el archivo data.csv (modo binario).\n");
- printf("3. Alta de empleado\n");
- printf("4. Modificar datos de empleado\n");
- printf("5. Baja de empleado\n");
- printf("6. Listar empleados\n");
- printf("7. Ordenar empleados\n");
- printf("8. Guardar los datos de los empleados en el archivo data.csv (modo texto).\n");
- printf("9. Guardar los datos de los empleados en el archivo data.bin (modo binario).\n");
-printf("10.Salir\n");
-fflush(stdin);
-	while(!scanf("%d",&opcion))
-	{
-		printf("dato no valido\n");
-		fflush(stdin);
-	}
-	return opcion;
-}
-int confirmarSiNo(void)
-{
-	int todoOk=0;
-	char confirma[3];
-	fflush(stdin);
-	gets(confirma);
-	if(stricmp(confirma,"si")==0)
-	{
-		todoOk=1;
-	}
-	return todoOk;
 }

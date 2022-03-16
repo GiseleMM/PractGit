@@ -126,6 +126,8 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 		printf("ingrese nombre");
 		fflush(stdin);
 		gets(nombre);
+		formatearNombre(nombre);
+		puts(nombre);
 
 		while(!employee_setNombre(auxEmployee,nombre))
 		{
@@ -188,12 +190,10 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 	int todoOk=0;
 	int id;
 	int indice;
-	int sueldo;
-	int horas;
-	char nombre[30];
+
 	Employee* auxEmployee=NULL;
 	char confirma[3];
-	int opcion;
+
 	int seModifico=0;
 	if(pArrayListEmployee!=NULL)
 	{
@@ -226,39 +226,26 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 						gets(confirma);
 						if(stricmp(confirma,"si")==0)
 						{
-							printf("Seleccione opcion:\n");
-							printf("1-nombre\n");
-							printf("2-horas\n");
-							printf("3-sueldo\n");
-							fflush(stdin);
-							if(!scanf("%d",&opcion))
+
+							switch(menuEdit())
 							{
-								printf("opcion  invalida");
-							}
-							switch(opcion)
-							{case 1:
-								printf("Ingrese nombre:");
-								fflush(stdin);
-								gets(nombre);
-								if(employee_setNombre(auxEmployee,nombre))
+
+							case 1:
+								if(modificarNombre(auxEmployee)==1)
 								{
 									seModifico=1;
 								}
+
 								break;
 							case 2:
-								printf("Ingrese horas:");
-								fflush(stdin);
-								scanf("%d",&horas);
-								if(employee_setHorasTrabajadas(auxEmployee,horas))
+								if(modificarHoras(auxEmployee)==1)
 								{
 									seModifico=1;
 								}
 								break;
 							case 3:
-								printf("Ingrese sueldo:");
-								fflush(stdin);
-								scanf("%d",&sueldo);
-								if(employee_setSueldo(auxEmployee,sueldo))
+
+								if(modificarSueldo(auxEmployee)==1)
 								{
 									seModifico=1;
 								}
@@ -291,7 +278,99 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 	}
     return todoOk;
 }
+//edit----------------------------
+int menuEdit(void)
+{
+	int opcion;
+	system("cls");
+	printf(" \nMenu modificacion\n");
+	printf("Seleccione opcion:\n");
+							printf("1-nombre\n");
+							printf("2-horas\n");
+							printf("3-sueldo\n");
+							fflush(stdin);
+							while(!scanf("%d",&opcion))
+							{
+								printf("opcion  invalida");
+								fflush(stdin);
+							}
+	return opcion;
+}
+int modificarNombre(Employee* pElement)
+{
+	int seModifico=0;
+	char nombre[30];
+	if(pElement!=NULL)
+	{
+		printf("Ingrese nombre:");
+		fflush(stdin);
+		gets(nombre);
+		printf("Confirma nuevo nombre %s?si/no\n",nombre);
+		if(confirmarSiNo()==1)
+		{
+			if(employee_setNombre(pElement,nombre))
+			{
+				seModifico=1;
+			}
+		}
+	}
+	return seModifico;
+}
+int modificarHoras(Employee* pElement)
+{
+	int seModifico=0;
+	int horas;
+	if(pElement!=NULL)
+	{
+		printf("Ingrese horas:");
+		fflush(stdin);
+		if(!scanf("%d",&horas))
+		{
+			printf("dato no valido");
+		}
+		else
+		{
 
+			printf("Confirma nueva horas %d?si/no\n",horas);
+			if(confirmarSiNo()==1)
+			{
+				if(employee_setHorasTrabajadas(pElement,horas))
+				{
+					seModifico=1;
+				}
+			}
+		}
+	}
+	return seModifico;
+}
+int modificarSueldo(Employee* pElement)
+{
+	int seModifico=0;
+	int sueldo;
+	if(pElement!=NULL)
+	{
+		printf("Ingrese sueldo:");
+		fflush(stdin);
+		if(!scanf("%d",&sueldo))
+		{
+			printf("dato no valido");
+		}
+		else
+		{
+
+			printf("Confirma nuevo sueldo %d?si/no\n",sueldo);
+			if(confirmarSiNo()==1)
+			{
+				if(employee_setSueldo(pElement,sueldo))
+				{
+					seModifico=1;
+				}
+			}
+		}
+	}
+	return seModifico;
+}
+//-----------------------------
 /** \brief Baja de empleado
  *
  * \param path char*
@@ -360,6 +439,8 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 	{
 
 		tam=ll_len(pArrayListEmployee);
+		printf("\nid |nombre		      |horas		|sueldo\n");
+		printf("------------------------------------------------\n");
 		for(int i=0;i<tam;i++)
 		{
 			auxEmployee=(Employee*)ll_get(pArrayListEmployee,i);
@@ -372,7 +453,7 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 	}
 	if(contador==0)
 	{
-		printf("lista vacia");
+		printf("\tlista vacia");
 	}
 	else
 	{
@@ -393,23 +474,12 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
     int todoOk=0;
-    int opcion;
+
     int seOrdeno=0;
     if(pArrayListEmployee!=NULL)
     {
-    	printf("indique criterio de ordenamiento\n");
-    	printf("1-Id ascendete\n");
-    	printf("2-Id descendete\n");
-    	printf("3-Nombre ascendente\n");
-    	printf("4-Nombre descendete\n");
-    	fflush(stdin);
-    	if(!scanf("%d",&opcion))
-    	{
-    		printf("Opcion no valida");
-    	}
-    	else
-    	{
-    		switch(opcion)
+
+    		switch(menuSort())
     		{
     		case 1:
     			if(ll_sort(pArrayListEmployee,compararId,1)==0)
@@ -439,7 +509,7 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
     			printf("Opcion invalida\n");
     			break;
     		}
-    	}
+
     }
     if(seOrdeno)
     {
@@ -490,6 +560,23 @@ int compararNombre(void* p1,void* p2)
 	}
 	return todoOk;
 }
+int menuSort(void)
+{
+	system("cls");
+	int opcion;
+  	printf("indique criterio de ordenamiento\n");
+    	printf("1-Id ascendete\n");
+    	printf("2-Id descendete\n");
+    	printf("3-Nombre ascendente\n");
+    	printf("4-Nombre descendete\n");
+    	fflush(stdin);
+    	while(!scanf("%d",&opcion))
+    	{
+    		printf("Opcion no valida");
+    		fflush(stdin);
+    	}
+    	return opcion;
+}
 //-----------------------------------
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo texto).
  *
@@ -513,6 +600,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
     Employee* auxEmployee=NULL;
     if(path!=NULL && pArrayListEmployee!=NULL)
     {
+
     	aux=fopen(path,"r");
     	if(aux!=NULL)
     	{
