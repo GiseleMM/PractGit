@@ -23,7 +23,7 @@ int menu(void);
 int main()
 {
 	setbuf(stdout,NULL);
-	system("color A1");
+	//system("color A1");
     int option = 0;
     char path[30];
     int estaVacia=1;
